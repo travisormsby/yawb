@@ -2,6 +2,9 @@
 
 # For each possible guess, check against each possible answer
 
+from wsgiref.simple_server import software_version
+
+
 guessesFile = "testguesses.txt"
 answersFile = "testanswers.txt"
 
@@ -11,14 +14,17 @@ with open(answersFile, "r") as a:
     answers = [word.rstrip() for word in a.readlines()]
 for guess in guesses:
     for answer in answers:
-        pattern = []
+        # find all exact matches, remove them, iterate through what's left to find soft matches
+        pattern = {}
+        softMatchAnswer = [l for l in answer]
+        softMatchGuess = [l for l in guess]
         for index, letter in enumerate(guess):
             if letter == answer[index]:
-                pattern.append(1)
+                pattern[index] = 1
             elif letter in answer:
-                pattern.append(0)
+                pattern[index] = 0
             else:
-                pattern.append(-1)
+                pattern[index] = -1
         print(guess, answer, pattern)
         # break
     # break
