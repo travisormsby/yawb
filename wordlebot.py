@@ -6,6 +6,7 @@ import math
 
 guessesFile = "guesses.txt"
 answersFile = "answers.txt"
+testAnswersFile = "testanswers.txt"
 
 with open(guessesFile, "r") as g:
     guesses = [word.rstrip() for word in g.readlines()]
@@ -80,24 +81,36 @@ def guesser(
         pattern = input("What pattern did you get? ")
     else:
         pattern = createPattern(guess, answer)
-        print(f"Guessing {guess}. Pattern: {pattern}")
     if pattern == "MMMMM":
-        print(f"Congratulations! You got it in {counter} guesses!")
-        return
+        if interactive:
+            print(f"Congratulations! You got it in {counter} guesses!")
+        return counter
     else:
         answers = best_guesser([guess], answers, pattern)
         if len(answers) == 1:
-            guesser(guessList, answers[0], answers, interactive, answer, counter)
+            counter = guesser(
+                guessList, answers[0], answers, interactive, answer, counter
+            )
         else:
             guess = best_guesser(guessList, answers)
-            guesser(guessList, guess, answers, interactive, answer, counter)
+            counter = guesser(guessList, guess, answers, interactive, answer, counter)
     return counter
 
 
-testAnswers = ["break", "breed", "briar", "bribe", "brick", "bride", "brief", "brine"]
+def wordlebot_test(guesses, answers):
+    guess_distribution = {}
+    for answer in answers:
+        guessCount = guesser(guesses, answers=answers, answer=answer)
+        if guessCount in guess_distribution:
+            guess_distribution[guessCount] += 1
+        else:
+            guess_distribution[guessCount] = 1
 
-for answer in testAnswers:
-    guesser(guesses, answers=answers, answer=answer)
+    print(guess_distribution)
 
 
-# guesser(guesses, answers=answers, interactive=True)
+# uncomment this line to test the bot against the answer list
+# wordlebot_test(guesses, answers)
+
+# uncomment this line to run the script interactively to solve today's Wordle
+guesser(guesses, answers=answers, interactive=True)
