@@ -40,9 +40,9 @@ def createPattern(guess, answer):
 
 def best_guesser(guesses, answers, answerPattern=None):
     best_expected_information = 0
+
     for guess in guesses:
         guessDict = {}
-
         for answer in answers:
             pattern = createPattern(guess, answer)
             if pattern in guessDict:
@@ -87,6 +87,7 @@ def guesser(
         return counter
     else:
         answers = best_guesser([guess], answers, pattern)
+        print(f"List of possible answers:\n{', '.join(answers)}")
         if len(answers) == 1:
             counter = guesser(
                 guessList, answers[0], answers, interactive, answer, counter
