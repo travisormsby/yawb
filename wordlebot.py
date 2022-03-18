@@ -60,8 +60,10 @@ def best_guesser(guesses, answers, answerPattern=None):
             information_of_pattern = math.log(1 / p_of_pattern, 2)
             guessDictP[pattern] = p_of_pattern * information_of_pattern
         expected_information = sum(guessDictP.values())
-        # Pick the guess with the highest entropy
-        if expected_information > best_expected_information:
+        # Pick the guess with the highest entropy, privileging words on the answers list
+        if expected_information > best_expected_information or (
+            guess in answers and expected_information == best_expected_information
+        ):
             best_expected_information = expected_information
             best_guess = guess
             best_guessDict = guessDict
