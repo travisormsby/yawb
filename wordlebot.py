@@ -17,7 +17,7 @@ with open(answersFile, "r") as a:
 def createPattern(guess, answer):
     patternDict = {}
     softMatchGuess = {}
-    softMatchAnswer = [l for l in answer]
+    softMatchAnswer = list(answer)
     # find all exact matches, remove them from the softmatch possibilities
     for index, letter in enumerate(guess):
         if letter == answer[index]:
@@ -80,7 +80,7 @@ def guesser(
     counter += 1
     if interactive:
         guess = input(f"I sugggest you play {guess}. What word did you play? ")
-        pattern = input("What pattern did you get? ")
+        pattern = input("What pattern did you get? ").upper()
     else:
         pattern = createPattern(guess, answer)
     if pattern == "MMMMM":
