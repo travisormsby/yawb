@@ -21,7 +21,7 @@ def createPattern(guess, answer):
     # find all exact matches, remove them from the softmatch possibilities
     for index, letter in enumerate(guess):
         if letter == answer[index]:
-            patternDict[index] = "M"
+            patternDict[index] = "G"
             softMatchAnswer.remove(letter)
         # If it is not an exact match, add it to a dictionary of softmatch possibilities. Use letter position as key to preserve position
         else:
@@ -29,11 +29,11 @@ def createPattern(guess, answer):
     # Loop through the letters in the guess that aren't exact matches, see if they softmatch any letters in answer that aren't exact matches. Remove them from the softmatch possibilities if they softmatch
     for index, letter in softMatchGuess.items():
         if letter in softMatchAnswer:
-            patternDict[index] = "S"
+            patternDict[index] = "Y"
             softMatchAnswer.remove(letter)
         # Note if not a softmatch
         else:
-            patternDict[index] = "X"
+            patternDict[index] = "B"
     pattern = "".join([patternDict[k] for k in sorted(patternDict.keys())])
     return pattern
 
@@ -83,7 +83,7 @@ def guesser(
         pattern = input("What pattern did you get? ").upper()
     else:
         pattern = createPattern(guess, answer)
-    if pattern == "MMMMM":
+    if pattern == "GGGGG":
         if interactive:
             print(f"Congratulations! You got it in {counter} guesses!")
         return counter
